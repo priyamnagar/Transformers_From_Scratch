@@ -44,6 +44,7 @@ class DataPreprocessing():
 
         int_to_word = {i: word for i, word in enumerate(vocab, 1)}  # Starts numbering from 1
         word_to_int = {word: i for i, word in int_to_word.items()}  # Reverse dictionary
+        print(max(int_to_word.keys()))
         
         return vocab, int_to_word, word_to_int
 

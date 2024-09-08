@@ -3,7 +3,9 @@ from modules.self_attention import SelfAttention
 import torch
 
 class MultiHeadAttention():
-    def __init__(self, input_dim, num_heads):
+    def __init__(self, 
+                 input_dim,
+                 num_heads):
         self.num_heads = num_heads
         self.input_dim = input_dim
         self.Q = nn.Linear(self.input_dim, self.input_dim//num_heads)
@@ -11,10 +13,12 @@ class MultiHeadAttention():
         self.V = nn.Linear(self.input_dim, self.input_dim//num_heads)
         self.transform = nn.Linear(self.input_dim, self.input_dim)
         
-    def multihead_attention(self, x, num_heads, mask = None):
+    def multihead_attention(self, x, num_heads, mask = None, key = None, value = None):
         query = self.Q(x)
-        key = self.K(x)
-        value = self.V(x)
+        if(key == None):
+            key = self.K(x)
+        if(value == None):
+            value = self.V(x)
         
         heads = []
         for i in range(num_heads):
@@ -23,5 +27,5 @@ class MultiHeadAttention():
             heads.append(contextual_embeddings)
         cat_emb = torch.cat(heads, dim=2)
         contextual_embeddings = self.transform(cat_emb)
-        return contextual_embeddings
+        return contextual_embeddings, query, key, value
         
