@@ -10,7 +10,7 @@ class Input(nn.Module):
                  embedding_dim
                 ):
         super().__init__()
-        self.embedding_layer = nn.Embedding(num_embeddings=vocab_size, embedding_dim=embedding_dim)
+        self.embedding_layer = nn.Embedding(num_embeddings=vocab_size, embedding_dim=embedding_dim, padding_idx = 0)
         self.max_sentence_length = max_sentence_length
         self.embedding_dim = embedding_dim
 

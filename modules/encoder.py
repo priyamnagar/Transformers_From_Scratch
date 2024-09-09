@@ -27,7 +27,6 @@ class Encoder(nn.Module):
         self.mask[self.mask == 0] = -torch.inf
         self.mask[self.mask == 1] = 0
         
-        # self.mask = None
         self.attention = MultiHeadAttention(self.embedding_dim, self.num_multiheads)
         self.add_norm = AddNorm(self.embedding_dim)
         self.ffn = FFN(self.embedding_dim, self.hidden_layer_size)
@@ -36,11 +35,13 @@ class Encoder(nn.Module):
         self.input = input
         for i in range(self.num_encoders):
             
-            contextual_embeddings, query, key, value = self.attention.multihead_attention(self.input, self.num_multiheads)
+            contextual_embeddings = self.attention.forward(self.input, type = "multihead")
+            
             contextual_embeddings_norm = self.add_norm.forward(self.input, contextual_embeddings)
+            
             contextual_embeddings = self.ffn.forward(contextual_embeddings_norm)
             
             self.input = contextual_embeddings
             
-        return contextual_embeddings, query, key, value
+        return contextual_embeddings
       
