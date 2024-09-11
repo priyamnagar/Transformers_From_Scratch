@@ -26,9 +26,13 @@ class Input(nn.Module):
 
     def forward(self, 
                 batch):
-        embeddings = self.embedding_layer(batch)
+        device = batch.device
+        embeddings = self.embedding_layer(batch).to(device)
                 
         pos_enc = self.positional_encoding()
+
+        pos_enc = pos_enc.to(device)
+        
         embeddings = embeddings + pos_enc
         
         return embeddings

@@ -65,18 +65,18 @@ class Transformer(nn.Module):
         self.linear = nn.Linear(self.embedding_dim, self.french_vocab_size)
 
     def forward(self, english_batch, french_batch):
+        device = english_batch.device
         # Encoder
-        encoder_input = self.inp_english.forward(english_batch)
+        encoder_input = self.inp_english.forward(english_batch).to(device)
 
-        encoder_output = self.encoder.forward(encoder_input)
+        encoder_output = self.encoder.forward(encoder_input).to(device)
     
         # Decoder
-        decoder_input = self.inp_french.forward(french_batch)
+        decoder_input = self.inp_french.forward(french_batch).to(device)
     
-        decoder_output = self.decoder.forward(decoder_input, encoder_output)
+        decoder_output = self.decoder.forward(decoder_input, encoder_output).to(device)
 
-        # Get Result
-        probabilities = F.softmax(self.linear(decoder_output))
-        result = torch.argmax(probabilities, dim=-1)
+        probabilities = F.softmax(self.linear(decoder_output)).to(device)
+        # result = torch.argmax(probabilities, dim=-1)
 
-        return result
+        return probabilities

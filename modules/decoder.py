@@ -31,6 +31,7 @@ class Decoder(nn.Module):
         self.input = None
 
     def forward(self,input, encoder_output):
+        device = input.device
         self.input = input
         for i in range(self.num_decoders):
             # maksed multihead attention block
@@ -39,13 +40,13 @@ class Decoder(nn.Module):
             contextual_embeddings_norm = self.add_norm.forward(self.input, contextual_embeddings)
             
             # Cross multihead attention block
-            Q = nn.Linear(self.embedding_dim, self.embedding_dim//self.num_multiheads)
-            K = nn.Linear(self.embedding_dim, self.embedding_dim//self.num_multiheads)
-            V = nn.Linear(self.embedding_dim, self.embedding_dim//self.num_multiheads)
+            Q = nn.Linear(self.embedding_dim, self.embedding_dim//self.num_multiheads).to(device)
+            K = nn.Linear(self.embedding_dim, self.embedding_dim//self.num_multiheads).to(device)
+            V = nn.Linear(self.embedding_dim, self.embedding_dim//self.num_multiheads).to(device)
             
-            query = Q(contextual_embeddings_norm)
-            key = K(encoder_output)
-            value = V(encoder_output)
+            query = Q(contextual_embeddings_norm).to(device)
+            key = K(encoder_output).to(device)
+            value = V(encoder_output).to(device)
             
             contextual_embeddings = self.attention.forward(self.input, type = "cross", query = query, key = key, value = value )
             

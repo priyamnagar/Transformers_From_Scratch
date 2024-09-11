@@ -23,23 +23,26 @@ class MultiHeadAttention(nn.Module):
         return contextual_embeddings
 
     def multihead_attention(self, x):
-        Q = nn.Linear(self.embedding_dim, self.embedding_dim//self.num_heads)
-        K = nn.Linear(self.embedding_dim, self.embedding_dim//self.num_heads)
-        V = nn.Linear(self.embedding_dim, self.embedding_dim//self.num_heads)
-        query = Q(x)
-        key = K(x)
-        value = V(x)
+        device = x.device
+        Q = nn.Linear(self.embedding_dim, self.embedding_dim//self.num_heads).to(device)
+        K = nn.Linear(self.embedding_dim, self.embedding_dim//self.num_heads).to(device)
+        V = nn.Linear(self.embedding_dim, self.embedding_dim//self.num_heads).to(device)
+
+        query = Q(x).to(device)
+        key = K(x).to(device)
+        value = V(x).to(device)
         
         contextual_embeddings = self.attention(x, mask = None, query = query, key = key, value = value)
         return contextual_embeddings
 
     def masked_multihead_attention(self, x, mask):
-        Q = nn.Linear(self.embedding_dim, self.embedding_dim//self.num_heads)
-        K = nn.Linear(self.embedding_dim, self.embedding_dim//self.num_heads)
-        V = nn.Linear(self.embedding_dim, self.embedding_dim//self.num_heads)
-        query = Q(x)
-        key = K(x)
-        value = V(x)
+        device = x.device
+        Q = nn.Linear(self.embedding_dim, self.embedding_dim//self.num_heads).to(device)
+        K = nn.Linear(self.embedding_dim, self.embedding_dim//self.num_heads).to(device)
+        V = nn.Linear(self.embedding_dim, self.embedding_dim//self.num_heads).to(device)
+        query = Q(x).to(device)
+        key = K(x).to(device)
+        value = V(x).to(device)
 
         contextual_embeddings = self.attention(x, mask = mask, query = query, key = key, value = value)
         return contextual_embeddings
@@ -57,6 +60,8 @@ class MultiHeadAttention(nn.Module):
                 key = None,
                 value = None
                 ):
+        device = x.device
+        
         if(type == "multihead"):
             contextual_embeddings = self.multihead_attention(x)
             
@@ -64,6 +69,7 @@ class MultiHeadAttention(nn.Module):
             if(mask == None):
                 raise "Mask not provided for masked multihead attention"
             else:
+                mask = mask.to(device)
                 contextual_embeddings = self.masked_multihead_attention(x, mask)
 
         elif(type == "cross"):
