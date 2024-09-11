@@ -40,8 +40,10 @@ class Encoder(nn.Module):
             contextual_embeddings_norm = self.add_norm.forward(self.input, contextual_embeddings)
             
             contextual_embeddings = self.ffn.forward(contextual_embeddings_norm)
+
+            contextual_embeddings_norm = self.add_norm.forward(contextual_embeddings_norm, contextual_embeddings)
             
-            self.input = contextual_embeddings
+            self.input = contextual_embeddings_norm
             
-        return contextual_embeddings
+        return contextual_embeddings_norm
       
