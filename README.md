@@ -6,6 +6,7 @@ The Dataset contains an English to French translation data, you can find it in t
 
 # How to Use
 To Train or inference the transformer, you need to use the Transformer class present in /modules/transformer.py.
+Execute Train.ipynb file for reference.
 
 ```python
 transformer = Transformer(
