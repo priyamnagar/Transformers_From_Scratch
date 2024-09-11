@@ -7,7 +7,8 @@ The Dataset contains an English to French translation data, you can find it in t
 # How to Use
 To Train or inference the transformer, you need to use the Transformer class present in /modules/transformer.py.
 
-_transformer = Transformer(
+```python
+transformer = Transformer(
     batch_size, # Data Batch size
     max_sentence_length, # Maximum sentence length allowed for input and output
     embedding_dim, # Dimention of word embeddings ex: 512
@@ -18,11 +19,14 @@ _transformer = Transformer(
     decoder_hidden_layer_size, # Hidden layer size for Fully connected neural network block in decoder
     english_vocab_size = preprocess.english_vocab_size + 1, # English Vocabulary size , here we are using a preprocess class.
     french_vocab_size = preprocess.french_vocab_size + 1 # French Vocabulary size , here we are using a preprocess class.
-)_
+)
+```
 
 To get predictions you can use the forward method defined in transformers class as below:
 
-_decoder_prediction = transformer.forward(encoder_input, decoder_input).float()_
+```python
+decoder_prediction = transformer.forward(encoder_input, decoder_input).float()
+```
 
 here encoder_input is the english input to the decoder (dimension is (batch_size, max_sentence_length, embedding_dim))
 and decoder_input is the french input to decoder with dimension same as the encoder_input.
